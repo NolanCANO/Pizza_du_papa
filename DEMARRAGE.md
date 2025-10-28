@@ -83,7 +83,7 @@ Si vous voulez aussi lancer le frontend Angular :
 ### a) Aller dans le dossier frontend
 
 ```powershell
-cd ..\pizzeria-front
+cd pizzeria-front
 ```
 
 ### b) Installer les dépendances npm
@@ -145,15 +145,16 @@ Ouvrez votre navigateur sur http://localhost:4200 et vous devriez voir :
 ## 📂 Résumé de la Structure
 
 ```
-Pizza_du_papa/           # ← BACKEND
-├── app/                 # Code source API
-├── tests/               # 69 tests TDD
-├── .venv/               # Environnement virtuel Python (à créer)
-└── requirements.txt     # Dépendances Python
-
-pizzeria-front/          # ← FRONTEND (dans le dossier parent)
-├── src/                 # Code source Angular
-└── node_modules/        # Dépendances npm (créé par npm install)
+Pizza_du_papa/              # ← DÉPÔT GIT PRINCIPAL (MONOREPO)
+├── app/                    # Code source API Backend
+├── tests/                  # 69 tests TDD Backend
+├── .venv/                  # Environnement virtuel Python (à créer)
+├── requirements.txt        # Dépendances Python
+├── pizzeria-front/         # ← FRONTEND ANGULAR (dans le même dépôt)
+│   ├── src/                # Code source Angular
+│   ├── package.json        # Dépendances npm
+│   └── node_modules/       # Dépendances npm (créé par npm install)
+└── DEMARRAGE.md            # Ce fichier
 ```
 
 ---
