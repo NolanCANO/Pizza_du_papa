@@ -126,7 +126,7 @@ python -m pytest tests/orders/test_orders_api.py::test_create_order_api
 
 ```
 Pizza_du_papa/
-├── app/                      # Code source de l'application
+├── app/                      # Code source de l'application Backend
 │   ├── main.py              # Point d'entrée FastAPI
 │   ├── db.py                # Configuration base de données
 │   ├── logging_config.py    # Configuration des logs
@@ -150,17 +150,26 @@ Pizza_du_papa/
 │       ├── stocks.py
 │       ├── orders.py
 │       └── deliveries.py
-├── tests/                   # Tests TDD (69 tests)
+├── tests/                   # Tests TDD Backend (69 tests)
 │   ├── conftest.py         # Configuration pytest
 │   ├── test_health.py
 │   ├── pizzas/
 │   ├── stocks/
 │   ├── orders/
 │   └── deliveries/
+├── pizzeria-front/          # Frontend Angular 17+ (Standalone)
+│   ├── src/                # Code source Angular
+│   │   ├── app/
+│   │   │   ├── core/      # Services, intercepteurs, modèles
+│   │   │   └── features/  # Pages (menu, cart, checkout, etc.)
+│   │   └── environments/  # Configuration par environnement
+│   ├── package.json       # Dépendances npm
+│   └── README.md          # Documentation frontend
 ├── logs/                    # Fichiers de logs (créé auto)
 ├── requirements.txt         # Dépendances Python
-├── Dockerfile              # Image Docker
+├── Dockerfile              # Image Docker Backend
 ├── docker-compose.yml      # Orchestration Docker
+├── DEMARRAGE.md            # 🚀 Guide de démarrage rapide
 └── README.md               # Ce fichier
 ```
 
