@@ -1,0 +1,48 @@
+<div class="min-h-screen bg-gray-50">
+  <!-- Header / Navigation -->
+  <header class="bg-white shadow-sm border-b border-gray-200">
+    <div class="container mx-auto px-4 py-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-6">
+          <a routerLink="/menu" class="text-2xl font-bold text-primary-600">
+            🍕 {{ title }}
+          </a>
+          <nav class="hidden md:flex space-x-4">
+            <a routerLink="/menu" routerLinkActive="text-primary-600 font-semibold" 
+               class="px-3 py-2 text-gray-700 hover:text-primary-600 transition-colors">
+              Menu
+            </a>
+            <a routerLink="/stocks" routerLinkActive="text-primary-600 font-semibold"
+               class="px-3 py-2 text-gray-700 hover:text-primary-600 transition-colors">
+              Stocks
+            </a>
+          </nav>
+        </div>
+        
+        <a routerLink="/cart" class="relative">
+          <button class="btn-primary flex items-center space-x-2">
+            <span>🛒</span>
+            <span>Panier</span>
+            @if (cartService.getItemCount() > 0) {
+              <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center font-bold">
+                {{ cartService.getItemCount() }}
+              </span>
+            }
+          </button>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container mx-auto px-4 py-8">
+    <router-outlet></router-outlet>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 text-white mt-16">
+    <div class="container mx-auto px-4 py-6 text-center">
+      <p>&copy; 2025 Pizzeria - Application développée avec Angular 17+ & TDD</p>
+    </div>
+  </footer>
+</div>
