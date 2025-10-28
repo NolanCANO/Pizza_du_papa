@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./logs:/app/logs
+      - ./pizzeria.db:/app/pizzeria.db
+    environment:
+      - PYTHONUNBUFFERED=1
