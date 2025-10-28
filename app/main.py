@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from app.db import init_db, SessionLocal
 from app.routers import pizzas, stocks, orders, deliveries
@@ -65,6 +66,19 @@ app = FastAPI(
     description="API pour une application mobile de pizzeria",
     version="1.0.0",
     lifespan=lifespan
+)
+
+# Configuration CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:4200",
+        "http://127.0.0.1:4200",
+        "http://localhost:4201",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # Enregistrer les routers
