@@ -1,0 +1,66 @@
+<div class="max-w-4xl mx-auto">
+  <h1 class="text-4xl font-bold text-gray-900 mb-8">🛒 Mon Panier</h1>
+
+  @if (cartService.cartItems().length === 0) {
+    <div class="text-center py-12">
+      <p class="text-xl text-gray-600 mb-4">Votre panier est vide</p>
+      <a routerLink="/menu" class="btn-primary">Voir le menu</a>
+    </div>
+  } @else {
+    <div class="space-y-4 mb-6">
+      @for (item of cartService.cartItems(); track item.pizza.id) {
+        <div class="card flex items-center justify-between">
+          <div class="flex-1">
+            <h3 class="text-lg font-bold text-gray-900">{{ item.pizza.name }}</h3>
+            <p class="text-gray-600">{{ item.pizza.price.toFixed(2) }} € x {{ item.quantity }}</p>
+          </div>
+          
+          <div class="flex items-center space-x-4">
+            <div class="flex items-center space-x-2">
+              <button 
+                (click)="updateQuantity(item.pizza.id, item.quantity - 1)"
+                class="w-8 h-8 bg-gray-200 rounded hover:bg-gray-300"
+                [disabled]="item.quantity <= 1">
+                -
+              </button>
+              <span class="w-12 text-center font-bold">{{ item.quantity }}</span>
+              <button 
+                (click)="updateQuantity(item.pizza.id, item.quantity + 1)"
+                class="w-8 h-8 bg-gray-200 rounded hover:bg-gray-300">
+                +
+              </button>
+            </div>
+            
+            <span class="text-xl font-bold text-primary-600 w-24 text-right">
+              {{ (item.pizza.price * item.quantity).toFixed(2) }} €
+            </span>
+            
+            <button 
+              (click)="remove(item.pizza.id)"
+              class="btn-danger">
+              Supprimer
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+
+    <div class="card bg-gray-50">
+      <div class="flex items-center justify-between mb-4">
+        <span class="text-2xl font-bold text-gray-900">Total</span>
+        <span class="text-3xl font-bold text-primary-600">
+          {{ cartService.getTotal().toFixed(2) }} €
+        </span>
+      </div>
+      
+      <div class="flex space-x-4">
+        <button (click)="clearCart()" class="btn-secondary flex-1">
+          Vider le panier
+        </button>
+        <a routerLink="/checkout" class="btn-primary flex-1 text-center">
+          Commander
+        </a>
+      </div>
+    </div>
+  }
+</div>

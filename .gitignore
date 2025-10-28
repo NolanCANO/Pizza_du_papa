@@ -49,3 +49,9 @@ htmlcov/
 # OS
 .DS_Store
 Thumbs.db
+
+# Frontend Angular
+pizzeria-front/node_modules/
+pizzeria-front/.angular/
+pizzeria-front/dist/
+pizzeria-front/.cache/

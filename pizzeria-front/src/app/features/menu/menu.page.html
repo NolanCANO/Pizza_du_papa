@@ -1,0 +1,49 @@
+<div class="max-w-7xl mx-auto">
+  <h1 class="text-4xl font-bold text-gray-900 mb-8">🍕 Notre Menu</h1>
+
+  @if (loading()) {
+    <div class="text-center py-12">
+      <p class="text-xl text-gray-600">Chargement des pizzas...</p>
+    </div>
+  }
+
+  @if (error()) {
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4" role="alert">
+      <p>{{ error() }}</p>
+      <button (click)="loadPizzas()" class="btn-secondary mt-2">Réessayer</button>
+    </div>
+  }
+
+  @if (!loading() && !error()) {
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      @for (pizza of pizzas(); track pizza.id) {
+        <div class="card hover:shadow-lg transition-shadow">
+          <div class="flex items-start justify-between mb-3">
+            <h3 class="text-xl font-bold text-gray-900">{{ pizza.name }}</h3>
+            @if (!pizza.is_available) {
+              <span class="badge-danger">Indisponible</span>
+            }
+          </div>
+          
+          <p class="text-gray-600 mb-4">{{ pizza.description }}</p>
+          
+          <div class="flex items-center justify-between">
+            <span class="text-2xl font-bold text-primary-600">{{ pizza.price.toFixed(2) }} €</span>
+            <button 
+              (click)="addToCart(pizza)" 
+              [disabled]="!pizza.is_available"
+              class="btn-primary">
+              Ajouter au panier
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+
+    @if (pizzas().length === 0) {
+      <div class="text-center py-12">
+        <p class="text-xl text-gray-600">Aucune pizza disponible pour le moment.</p>
+      </div>
+    }
+  }
+</div>

@@ -2,6 +2,8 @@
 
 API backend pour une application mobile de pizzeria, développée avec **FastAPI** et suivant strictement la méthodologie **TDD (Test-Driven Development)**.
 
+> **🚀 NOUVEAU SUR LE PROJET ?** → Consultez le **[Guide de Démarrage Rapide](DEMARRAGE.md)** pour lancer l'application en 5 minutes !
+
 ## 🎯 Fonctionnalités
 
 ### Gestion complète de pizzeria
