@@ -1,4 +1,4 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from app.models.pizza import Pizza
 from app.schemas.pizza import PizzaCreate, PizzaUpdate
 
@@ -11,6 +11,13 @@ def get_all_pizzas(db: Session) -> list[Pizza]:
 def get_pizza_by_id(db: Session, pizza_id: int) -> Pizza | None:
     """Récupère une pizza par son ID."""
     return db.query(Pizza).filter(Pizza.id == pizza_id).first()
+
+
+def get_pizza_with_sizes(db: Session, pizza_id: int) -> Pizza | None:
+    """Récupère une pizza avec ses tailles disponibles."""
+    return db.query(Pizza).options(
+        joinedload(Pizza.pizza_sizes).joinedload("size")
+    ).filter(Pizza.id == pizza_id).first()
 
 
 def create_pizza(db: Session, pizza_data: PizzaCreate) -> Pizza:

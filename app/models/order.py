@@ -26,7 +26,10 @@ class OrderItem(Base):
     id = Column(Integer, primary_key=True, index=True)
     order_id = Column(Integer, ForeignKey("orders.id"), nullable=False)
     pizza_id = Column(Integer, ForeignKey("pizzas.id"), nullable=False)
+    size_id = Column(Integer, ForeignKey("sizes.id"), nullable=True)  # Optional size
     quantity = Column(Integer, nullable=False)
+    unit_price = Column(Float, nullable=False)  # Price at time of order
     
     order = relationship("Order", back_populates="items")
     pizza = relationship("Pizza")
+    size = relationship("Size")

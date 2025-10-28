@@ -1,9 +1,10 @@
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
 from app.db import init_db, SessionLocal
-from app.routers import pizzas, stocks, orders, deliveries
+from app.routers import pizzas, stocks, orders, deliveries, sizes
 from app.models.pizza import Pizza
 from app.models.stock import StockItem
+from app.models.size import Size, PizzaSize
 from app.logging_config import logger
 
 
@@ -39,6 +40,26 @@ def seed_database():
         ]
         db.add_all(stock_items)
         
+        # Tailles par défaut
+        sizes = [
+            Size(name="Small", description="20cm", price_multiplier=0.8),
+            Size(name="Medium", description="25cm", price_multiplier=1.0),
+            Size(name="Large", description="30cm", price_multiplier=1.3),
+            Size(name="XL", description="35cm", price_multiplier=1.6),
+        ]
+        db.add_all(sizes)
+        db.commit()  # Commit pour récupérer les IDs
+        
+        # Créer des combinaisons pizza-taille pour toutes les pizzas
+        for pizza in pizzas:
+            for size in sizes:
+                pizza_size = PizzaSize(
+                    pizza_id=pizza.id,
+                    size_id=size.id,
+                    is_available=True
+                )
+                db.add(pizza_size)
+        
         db.commit()
         logger.info("Base de données initialisée avec succès")
     except Exception as e:
@@ -72,6 +93,8 @@ app.include_router(pizzas.router)
 app.include_router(stocks.router)
 app.include_router(orders.router)
 app.include_router(deliveries.router)
+app.include_router(sizes.router)
+app.include_router(sizes.pizza_sizes_router)
 
 
 @app.get("/")
@@ -86,7 +109,9 @@ def root():
             "pizzas": "/pizzas",
             "stocks": "/stocks",
             "orders": "/orders",
-            "deliveries": "/deliveries"
+            "deliveries": "/deliveries",
+            "sizes": "/sizes",
+            "pizza-sizes": "/pizza-sizes"
         }
     }
 

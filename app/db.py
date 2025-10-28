@@ -24,5 +24,5 @@ def get_db():
 
 def init_db():
     """Initialise la base de données et crée les tables."""
-    from app.models import pizza, stock, order, delivery
+    from app.models import pizza, stock, order, delivery, size
     Base.metadata.create_all(bind=engine)

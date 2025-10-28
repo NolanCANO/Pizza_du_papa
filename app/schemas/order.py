@@ -1,10 +1,13 @@
 from pydantic import BaseModel, Field, ConfigDict
 from datetime import datetime
+from typing import Optional
+from .size import Size
 
 
 class OrderItemCreate(BaseModel):
     """Schéma pour créer un item de commande."""
     pizza_id: int = Field(..., gt=0)
+    size_id: Optional[int] = Field(None, gt=0, description="ID de la taille (optionnel)")
     quantity: int = Field(..., gt=0)
 
 
@@ -12,7 +15,16 @@ class OrderItemResponse(BaseModel):
     """Schéma de réponse pour un item de commande."""
     id: int
     pizza_id: int
+    size_id: Optional[int]
     quantity: int
+    unit_price: float
+    
+    model_config = ConfigDict(from_attributes=True)
+
+
+class OrderItemWithDetails(OrderItemResponse):
+    """Schéma de réponse pour un item de commande avec détails."""
+    size: Optional[Size] = None
     
     model_config = ConfigDict(from_attributes=True)
 
@@ -38,6 +50,6 @@ class OrderResponse(BaseModel):
     status: str
     created_at: datetime
     updated_at: datetime
-    items: list[OrderItemResponse]
+    items: list[OrderItemWithDetails]
     
     model_config = ConfigDict(from_attributes=True)

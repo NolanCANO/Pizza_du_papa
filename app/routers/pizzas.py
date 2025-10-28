@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.db import get_db
-from app.schemas.pizza import PizzaCreate, PizzaUpdate, PizzaResponse
+from app.schemas.pizza import PizzaCreate, PizzaUpdate, PizzaResponse, PizzaWithSizes
 from app.services import pizza_service
 
 router = APIRouter(prefix="/pizzas", tags=["pizzas"])
@@ -17,6 +17,15 @@ def list_pizzas(db: Session = Depends(get_db)):
 def get_pizza(pizza_id: int, db: Session = Depends(get_db)):
     """Récupère une pizza par son ID."""
     pizza = pizza_service.get_pizza_by_id(db, pizza_id)
+    if not pizza:
+        raise HTTPException(status_code=404, detail="Pizza introuvable")
+    return pizza
+
+
+@router.get("/{pizza_id}/with-sizes", response_model=PizzaWithSizes)
+def get_pizza_with_sizes(pizza_id: int, db: Session = Depends(get_db)):
+    """Récupère une pizza avec ses tailles disponibles."""
+    pizza = pizza_service.get_pizza_with_sizes(db, pizza_id)
     if not pizza:
         raise HTTPException(status_code=404, detail="Pizza introuvable")
     return pizza

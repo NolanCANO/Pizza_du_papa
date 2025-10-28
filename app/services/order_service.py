@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 from app.models.order import Order, OrderItem
 from app.models.pizza import Pizza
+from app.models.size import Size, PizzaSize
 from app.schemas.order import OrderCreate, OrderStatusUpdate
 from app.services import stock_service
 from app.logging_config import logger
@@ -42,7 +43,23 @@ def create_order(db: Session, order_data: OrderCreate) -> Order:
         if not pizza.is_available:
             raise ValueError(f"Pizza '{pizza.name}' non disponible")
         
-        total_price += pizza.price * item.quantity
+        # Calculer le prix en fonction de la taille
+        item_price = pizza.price  # Prix de base
+        
+        if item.size_id:
+            # Vérifier que la combinaison pizza-taille existe
+            pizza_size = db.query(PizzaSize).filter(
+                PizzaSize.pizza_id == item.pizza_id,
+                PizzaSize.size_id == item.size_id,
+                PizzaSize.is_available == True
+            ).first()
+            
+            if not pizza_size:
+                raise ValueError(f"Taille non disponible pour la pizza '{pizza.name}'")
+            
+            item_price = pizza_size.calculated_price
+        
+        total_price += item_price * item.quantity
         
         # Calculer les ingrédients nécessaires
         if pizza.name in PIZZA_INGREDIENTS:
@@ -72,10 +89,23 @@ def create_order(db: Session, order_data: OrderCreate) -> Order:
     
     # Créer les items de commande
     for item_data in order_data.items:
+        # Recalculer le prix unitaire pour ce item
+        pizza = db.query(Pizza).filter(Pizza.id == item_data.pizza_id).first()
+        unit_price = pizza.price
+        
+        if item_data.size_id:
+            pizza_size = db.query(PizzaSize).filter(
+                PizzaSize.pizza_id == item_data.pizza_id,
+                PizzaSize.size_id == item_data.size_id
+            ).first()
+            unit_price = pizza_size.calculated_price
+        
         order_item = OrderItem(
             order_id=order.id,
             pizza_id=item_data.pizza_id,
-            quantity=item_data.quantity
+            size_id=item_data.size_id,
+            quantity=item_data.quantity,
+            unit_price=unit_price
         )
         db.add(order_item)
     
